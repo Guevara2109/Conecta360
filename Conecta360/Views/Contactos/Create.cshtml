@@ -1,0 +1,65 @@
+@model Conect360.Models.Contacto
+
+@{
+    ViewData["Title"] = "Registro";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-heading">
+    <h2>Registro de Contacto</h2>
+    <a href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    </a>
+<form asp-action="Create" method="post" class="form-sketch">
+
+    <div asp-validation-summary="ModelOnly" style="color:#c00;font-family:'Caveat',cursive;margin-bottom:8px"></div>
+
+    <div class="row2">
+        <div class="fg">
+            <label asp-for="Nombre">Nombre</label>
+            <input asp-for="Nombre" placeholder="Ej:" />
+            <span asp-validation-for="Nombre" style="color:#c00;font-size:.8rem"></span>
+        </div>
+        <div class="fg">
+            <label asp-for="Apellido">Apellido</label>
+            <input asp-for="Apellido" placeholder="Ej:" />
+            <span asp-validation-for="Apellido" style="color:#c00;font-size:.8rem"></span>
+        </div>
+    </div>
+
+    <div class="row2">
+        <div class="fg">
+            <label asp-for="Telefono">Teléfono</label>
+            <input asp-for="Telefono" placeholder="+503 XXXX-XXXX" />
+            <span asp-validation-for="Telefono" style="color:#c00;font-size:.8rem"></span>
+        </div>
+        <div class="fg">
+            <label asp-for="Email">Correo Electrónico</label>
+            <input asp-for="Email" placeholder="correo@ejemplo.com" />
+            <span asp-validation-for="Email" style="color:#c00;font-size:.8rem"></span>
+        </div>
+    </div>
+
+    <div class="fg">
+        <label asp-for="Categoria">Categoría</label>
+        <select asp-for="Categoria">
+            <option value="General">General</option>
+            <option value="Familia">Familia</option>
+            <option value="Trabajo">Trabajo</option>
+            <option value="Amigos">Amigos</option>
+            <option value="Favoritos">Favoritos</option>
+        </select>
+    </div>
+
+    <div class="fg">
+        <label asp-for="Notas">Notas</label>
+        <textarea asp-for="Notas" placeholder="Información adicional..."></textarea>
+    </div>
+
+    <button type="submit" class="btn-guardar">Guardar Contacto</button>
+    <a href="/" class="btn-cancelar" style="display:block;text-align:center;text-decoration:none">Cancelar</a>
+
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
