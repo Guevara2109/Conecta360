@@ -7,8 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Mensajes\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Views\Contactos\" />
-    <Folder Include="Views\Mensajes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Mensajes\Index.cshtml" />
   </ItemGroup>
 
 </Project>
