@@ -6,115 +6,182 @@
     <title>@ViewData["Title"] - Conect360</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background: #e0e0e0;
+            background: #d8d8d8;
             font-family: 'Caveat', cursive;
             color: #111;
             min-height: 100vh;
-        }
-
-        /* Líneas de cuaderno en el fondo */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
             background-image: repeating-linear-gradient(
                 transparent,
                 transparent 27px,
                 #b8c8e8 28px
             );
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 0;
         }
 
-        .page-wrapper {
-            position: relative;
-            z-index: 1;
-            max-width: 480px;
-            margin: 20px auto;
-            background: #f5f5f0;
-            border: 3px solid #1a1a1a;
-            border-radius: 2px;
-            padding: 18px;
-            box-shadow: 4px 4px 0 #999;
+        /* ── LAYOUT PRINCIPAL ── */
+        .app-shell {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topbar-brand {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .topbar-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .topbar-nav a {
+            border: 1.5px solid #444;
+            background: transparent;
+            color: #fff;
+            padding: 5px 16px;
+            font-family: 'Caveat', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .15s;
+            text-decoration: none;
+        }
+        .topbar-nav a:hover,
+        .topbar-nav a.active {
+            background: #4422cc;
+            border-color: #4422cc;
+            color: #fff;
+        }
+        .topbar-right {
+            font-size: 12px;
+            color: #777;
+            font-family: 'Caveat', cursive;
+        }
+
+        /* ── CONTENEDOR PRINCIPAL ── */
+        .main-layout {
+            display: flex;
+            flex: 1;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 210px;
+            flex-shrink: 0;
+            background: #f0efe8;
             background-image: repeating-linear-gradient(
                 transparent,
                 transparent 27px,
                 #c5d5ee 28px
             );
-        }
-
-        /* ── NAV ── */
-        .nav-sketch {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 14px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #1a1a1a;
-        }
-        .nav-sketch a {
-            border: 2px solid #1a1a1a;
-            background: #fff;
-            padding: 4px 10px;
-            font-size: 0.85rem;
-            font-family: 'Caveat', cursive;
-            color: #111;
-            text-decoration: none;
-            transition: background .15s;
-        }
-        .nav-sketch a:hover { background: #eee8ff; }
-
-        /* ── TÍTULO ── */
-        .brand-block {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-        .brand-title {
-            font-family: 'Permanent Marker', cursive;
-            font-size: 3rem;
-            color: #111;
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-        .brand-globe {
+            border-right: 3px solid #1a1a1a;
+            padding: 20px 12px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 4px;
         }
-        .globe-circle {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #3a8fd4;
+        .sb-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin: 10px 0 4px;
+            font-family: 'Caveat', cursive;
+        }
+        .sb-link {
             border: 2px solid #1a1a1a;
-            position: relative;
-            overflow: hidden;
+            background: #fff;
+            color: #1a1a1a;
+            padding: 7px 12px;
+            font-family: 'Caveat', cursive;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all .15s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
-        .globe-land {
-            position: absolute;
-            background: #4aaa44;
-        }
-        .globe-land-1 { width: 26px; height: 20px; top: 8px; left: 8px; border-radius: 50% 30% 40% 50%; }
-        .globe-land-2 { width: 14px; height: 12px; bottom: 7px; right: 5px; border-radius: 40%; }
-        .globe-a {
-            font-family: 'Permanent Marker', cursive;
-            font-size: 1.6rem;
+        .sb-link:hover,
+        .sb-link.active {
+            background: #eee8ff;
             color: #4422cc;
-            margin-top: 2px;
+            border-color: #4422cc;
+        }
+        .sb-link.primary {
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .sb-link.primary:hover {
+            background: #4422cc;
+            border-color: #4422cc;
+        }
+        .sb-summary {
+            border: 2px solid #1a1a1a;
+            background: #fff;
+            padding: 10px 12px;
+            margin-top: 8px;
+        }
+        .sb-summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 3px 0;
+            border-bottom: 1px solid #eee;
+            color: #1a1a1a;
+            font-family: 'Caveat', cursive;
+        }
+        .sb-summary-row:last-child { border-bottom: none; }
+        .sb-summary-row span:last-child { font-weight: 700; }
+
+        /* ── CONTENIDO PRINCIPAL ── */
+        .page-content {
+            flex: 1;
+            background: #f5f5f0;
+            background-image: repeating-linear-gradient(
+                transparent,
+                transparent 27px,
+                #c5d5ee 28px
+            );
+            padding: clamp(16px, 3vw, 32px);
+            min-height: calc(100vh - 52px);
         }
 
-        .title-divider {
-            height: 5px;
-            background: #1a1a1a;
-            margin: 6px 0 12px;
+        /* ── CABECERA DE PÁGINA ── */
+        .page-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1a1a1a;
+        }
+        .page-heading h2 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 1.6rem;
+            color: #111;
         }
 
         /* ── CAJAS GENÉRICAS ── */
@@ -136,91 +203,66 @@
         }
         .sketch-box:hover { background: #eee8ff; color: #111; }
 
-        /* ── MENSAJES (burbuja) ── */
-        .bubble-icon {
-            width: 26px;
-            height: 26px;
-            background: #cc44aa;
-            border-radius: 50% 50% 50% 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 8px;
-            flex-shrink: 0;
+        /* ── BOTONES ── */
+        .btn-guardar {
+            border: 3px solid #1a1a1a;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Caveat', cursive;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 9px 28px;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background .15s;
         }
-        .bubble-icon span {
-            display: flex;
-            gap: 3px;
-        }
-        .bubble-icon span i {
-            width: 4px;
-            height: 4px;
+        .btn-guardar:hover { background: #4422cc; border-color: #4422cc; }
+
+        .btn-cancelar {
+            border: 2px solid #aaa;
             background: #fff;
-            border-radius: 50%;
+            color: #666;
+            font-family: 'Caveat', cursive;
+            font-size: 1rem;
+            padding: 8px 20px;
+            cursor: pointer;
+            margin-top: 6px;
+            margin-left: 10px;
+            text-decoration: none;
             display: inline-block;
         }
+        .btn-cancelar:hover { border-color: #1a1a1a; color: #111; }
 
-        /* ── TECLADO ── */
-        .teclado-title {
+        .btn-nuevo {
+            border: 2px solid #1a1a1a;
+            background: #1a1a1a;
+            color: #fff;
             font-family: 'Caveat', cursive;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #3355cc;
-            text-align: center;
-            margin-bottom: 6px;
-        }
-        .dial-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-        }
-        .dial-key {
-            background: transparent;
-            border: none;
-            font-family: 'Caveat', cursive;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #111;
-            text-align: center;
-            padding: 6px 0;
+            font-size: 0.9rem;
+            padding: 5px 16px;
             cursor: pointer;
-            transition: color .15s;
+            text-decoration: none;
+            display: inline-block;
+            transition: all .15s;
         }
-        .dial-key:hover { color: #4422cc; }
-        .dial-actions {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            margin-top: 6px;
-        }
-        .call-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .call-phone { background: #2db542; color: #fff; }
-        .call-video { background: #2b7fd4; color: #fff; }
+        .btn-nuevo:hover { background: #4422cc; border-color: #4422cc; color: #fff; }
 
         /* ── FORMULARIO ── */
         .form-sketch {
-            border: 2px solid #1a1a1a;
+            border: 2.5px solid #1a1a1a;
             background: #fff;
-            padding: 16px;
-            margin-top: 10px;
+            padding: 24px;
+            max-width: 700px;
         }
         .form-sketch label {
             font-family: 'Caveat', cursive;
-            font-size: 0.85rem;
+            font-size: 11px;
             font-weight: 700;
-            color: #444;
+            color: #555;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .form-sketch input,
         .form-sketch select,
@@ -228,7 +270,7 @@
             width: 100%;
             border: 2px solid #1a1a1a;
             background: #fff;
-            padding: 6px 10px;
+            padding: 8px 12px;
             font-family: 'Caveat', cursive;
             font-size: 0.95rem;
             color: #111;
@@ -237,141 +279,209 @@
         }
         .form-sketch input:focus,
         .form-sketch select:focus,
-        .form-sketch textarea:focus {
-            border-color: #4422cc;
-        }
-        .form-sketch textarea { min-height: 70px; resize: vertical; }
-        .form-sketch .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .form-sketch .fg { margin-bottom: 10px; }
-
-        .btn-guardar {
-            width: 100%;
-            border: 3px solid #1a1a1a;
-            background: #1a1a1a;
-            color: #fff;
-            font-family: 'Caveat', cursive;
-            font-size: 1.05rem;
-            font-weight: 700;
-            padding: 8px;
-            cursor: pointer;
-            margin-top: 6px;
-            transition: background .15s;
-        }
-        .btn-guardar:hover { background: #4422cc; border-color: #4422cc; }
-        .btn-cancelar {
-            width: 100%;
-            border: 2px solid #aaa;
-            background: #fff;
-            color: #666;
-            font-family: 'Caveat', cursive;
-            font-size: 1rem;
-            padding: 7px;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-        .btn-cancelar:hover { border-color: #1a1a1a; color: #111; }
+        .form-sketch textarea:focus { border-color: #4422cc; }
+        .form-sketch textarea { min-height: 80px; resize: vertical; }
+        .form-sketch .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-sketch .fg { margin-bottom: 12px; }
+        .form-actions { border-top: 2px solid #eee; padding-top: 14px; margin-top: 8px; }
 
         /* ── TABLA ── */
         .table-sketch {
             width: 100%;
             border-collapse: collapse;
             font-family: 'Caveat', cursive;
-            font-size: 0.9rem;
+            font-size: 14px;
+            background: #fff;
         }
         .table-sketch th {
             background: #1a1a1a;
             color: #fff;
-            padding: 7px 10px;
+            padding: 9px 14px;
             text-align: left;
-            font-size: 0.8rem;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .table-sketch td {
-            padding: 6px 10px;
-            border-bottom: 1px solid #ccc;
+            padding: 8px 14px;
+            border-bottom: 1px solid #ddd;
             color: #222;
         }
         .table-sketch tr:hover td { background: #eee8ff; }
 
+        /* ── BARRA BÚSQUEDA ── */
         .search-sketch {
-            width: 100%;
             border: 2px solid #1a1a1a;
             background: #fff;
-            padding: 7px 10px;
+            padding: 7px 12px;
             font-family: 'Caveat', cursive;
             font-size: 0.95rem;
-            margin-bottom: 10px;
             outline: none;
+            transition: border-color .15s;
         }
         .search-sketch:focus { border-color: #4422cc; }
 
-        .btn-nuevo {
-            border: 2px solid #1a1a1a;
-            background: #1a1a1a;
-            color: #fff;
-            font-family: 'Caveat', cursive;
-            font-size: 0.9rem;
-            padding: 5px 14px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-nuevo:hover { background: #4422cc; border-color: #4422cc; color: #fff; }
-
-        .page-heading {
+        /* ── TOOLBAR ── */
+        .toolbar {
             display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
             align-items: center;
-            justify-content: space-between;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #1a1a1a;
         }
-        .page-heading h2 {
+        .toolbar .search-sketch { flex: 1; min-width: 200px; }
+
+        /* ── ACCIONES TABLA ── */
+        .act {
+            background: none;
+            border: 1.5px solid #ccc;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Caveat', cursive;
+            color: #4422cc;
+            padding: 2px 10px;
+            margin-right: 4px;
+            transition: all .15s;
+        }
+        .act:hover { border-color: #4422cc; background: #eee8ff; }
+        .act.del { color: #cc2200; }
+        .act.del:hover { border-color: #cc2200; background: #fee; }
+
+        /* ── BADGES CATEGORÍA ── */
+        .badge-cat {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 9px;
+            border-radius: 12px;
+        }
+        .badge-familia  { background: #e1f5ee; color: #0f6e56; }
+        .badge-trabajo  { background: #e6f1fb; color: #185fa5; }
+        .badge-amigos   { background: #faeeda; color: #854f0b; }
+        .badge-favoritos { background: #fbeaf0; color: #993556; }
+        .badge-general  { background: #f1efe8; color: #5f5e5a; }
+
+        /* ── CATEGORÍAS ── */
+        .cat-grupo {
+            border: 2.5px solid #1a1a1a;
+            background: #fff;
+            padding: 14px 16px;
+        }
+        .cat-titulo {
             font-family: 'Permanent Marker', cursive;
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             color: #111;
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cat-item {
+            font-family: 'Caveat', cursive;
+            font-size: 13px;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            color: #333;
+            display: flex;
+            justify-content: space-between;
+        }
+        .cat-item:last-child { border-bottom: none; }
+        .cats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
         }
 
-        /* ── MENSAJES FLASH ── */
+        /* ── TOAST ── */
         .toast-sketch {
             background: #1a1a1a;
             color: #fff;
-            padding: 7px 14px;
+            padding: 8px 18px;
             font-family: 'Caveat', cursive;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            font-size: 14px;
+            margin-bottom: 14px;
+            border-left: 4px solid #4422cc;
             display: none;
         }
         .toast-sketch.show { display: block; }
 
-        /* ── ACCIÓN BOTONES TABLA ── */
-        .act { background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0 3px; }
-
+        /* ── FOOTER ── */
         footer {
+            background: #1a1a1a;
+            color: #666;
             text-align: center;
-            padding: 10px;
-            color: #999;
+            padding: 8px;
             font-family: 'Caveat', cursive;
-            font-size: 0.8rem;
+            font-size: 12px;
+        }
+
+        /* ── RESPONSIVE MÓVIL ── */
+        @media (max-width: 640px) {
+            .sidebar { display: none; }
+            .topbar-right { display: none; }
+            .form-sketch .row2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="page-wrapper">
-        <nav class="nav-sketch">
-            <a href="/">Inicio</a>
-            <a href="/Contactos/Create">Registro</a>
-            <a href="/Contactos">Contactos</a>
-            <a href="/Contactos/Categorias">Categorías</a>
-            <a href="/Mensajes">Mensajes</a>
-        </nav>
+    <div class="app-shell">
 
-        @RenderBody()
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <a href="/" class="topbar-brand">Conect360</a>
+            <nav class="topbar-nav">
+                <a href="/" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">Inicio</a>
+                <a href="/Contactos/Create" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "active" : "")">Registro</a>
+                <a href="/Contactos" class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Contactos" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">Contactos</a>
+                <a href="/Contactos/Categorias" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Categorias" ? "active" : "")">Categorías</a>
+            </nav>
+            <div class="topbar-right">© 2026 Conect360</div>
+        </header>
+
+        <div class="main-layout">
+
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:#3a8fd4;border:2px solid #1a1a1a;position:relative;overflow:hidden;flex-shrink:0;">
+                        <div style="position:absolute;background:#4aaa44;width:22px;height:17px;top:7px;left:7px;border-radius:50% 30% 40% 50%;"></div>
+                        <div style="position:absolute;background:#4aaa44;width:11px;height:9px;bottom:6px;right:4px;border-radius:40%;"></div>
+                    </div>
+                    <div>
+                        <div style="font-family:'Permanent Marker',cursive;font-size:15px;color:#1a1a1a;">Conect360</div>
+                        <div style="font-size:10px;color:#888;font-family:'Caveat',cursive;">Agenda personal</div>
+                    </div>
+                </div>
+
+                <div class="sb-label">Navegación</div>
+                <a href="/" class="sb-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")">⌂ &nbsp;Inicio</a>
+                <a href="/Contactos" class="sb-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Contactos" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")">☰ &nbsp;Contactos</a>
+                <a href="/Contactos/Categorias" class="sb-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Categorias" ? "active" : "")">◈ &nbsp;Categorías</a>
+
+                <div class="sb-label">Acciones</div>
+                <a href="/Contactos/Create" class="sb-link primary">+ &nbsp;Nuevo Contacto</a>
+
+                <div class="sb-label">Resumen</div>
+                <div class="sb-summary">
+                    <div class="sb-summary-row"><span>Contactos</span><span>@ViewBag.TotalContactos</span></div>
+                    <div class="sb-summary-row"><span>Categorías</span><span>@ViewBag.TotalCategorias</span></div>
+                </div>
+            </aside>
+
+            <!-- CONTENIDO -->
+            <main class="page-content">
+                @if (TempData["Mensaje"] != null)
+            {
+                <div class="toast-sketch show">@TempData["Mensaje"]</div>
+            }
+                @RenderBody()
+            </main>
+
+        </div>
+
+        <footer>© 2026 Conect360 — Agenda de contactos personal</footer>
     </div>
-
-    <footer>&copy; 2026 Conect360</footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
