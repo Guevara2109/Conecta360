@@ -1,29 +1,32 @@
 @model Conect360.Models.Contacto
 
 @{
-    ViewData["Title"] = "Registro";
+    ViewData["Title"] = "Editar Contacto";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="page-heading">
-    <h2>Registrar Nuevo Contacto</h2>
+    <h2>Editar Contacto</h2>
+    <a href="/Contactos" class="btn-nuevo" style="background:#fff;color:#1a1a1a;border-color:#1a1a1a;">
+        ← Volver
+    </a>
 </div>
 
-<form asp-action="Create" method="post" class="form-sketch">
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" class="form-sketch">
 
     <div asp-validation-summary="ModelOnly"
-         style="color:#cc2200;font-family:'Caveat',cursive;margin-bottom:12px;border:2px solid #cc2200;padding:8px;background:#fee;display:@(ViewData.ModelState.IsValid ? "none" : "block")">
+         style="color:#cc2200;font-family:'Caveat',cursive;margin-bottom:12px;border:2px solid #cc2200;padding:8px;background:#fee;">
     </div>
 
     <div class="row2">
         <div class="fg">
             <label asp-for="Nombre">Nombre *</label>
-            <input asp-for="Nombre" placeholder="Ej: Ana" />
+            <input asp-for="Nombre" />
             <span asp-validation-for="Nombre" style="color:#cc2200;font-size:12px;"></span>
         </div>
         <div class="fg">
             <label asp-for="Apellido">Apellido *</label>
-            <input asp-for="Apellido" placeholder="Ej: López" />
+            <input asp-for="Apellido" />
             <span asp-validation-for="Apellido" style="color:#cc2200;font-size:12px;"></span>
         </div>
     </div>
@@ -31,12 +34,12 @@
     <div class="row2">
         <div class="fg">
             <label asp-for="Telefono">Teléfono *</label>
-            <input asp-for="Telefono" placeholder="+503 XXXX-XXXX" />
+            <input asp-for="Telefono" />
             <span asp-validation-for="Telefono" style="color:#cc2200;font-size:12px;"></span>
         </div>
         <div class="fg">
             <label asp-for="Email">Correo Electrónico</label>
-            <input asp-for="Email" placeholder="correo@ejemplo.com" />
+            <input asp-for="Email" />
             <span asp-validation-for="Email" style="color:#cc2200;font-size:12px;"></span>
         </div>
     </div>
@@ -54,11 +57,11 @@
 
     <div class="fg">
         <label asp-for="Notas">Notas</label>
-        <textarea asp-for="Notas" placeholder="Información adicional..."></textarea>
+        <textarea asp-for="Notas"></textarea>
     </div>
 
     <div class="form-actions">
-        <button type="submit" class="btn-guardar">Guardar Contacto</button>
+        <button type="submit" class="btn-guardar">Guardar Cambios</button>
         <a href="/Contactos" class="btn-cancelar">Cancelar</a>
     </div>
 

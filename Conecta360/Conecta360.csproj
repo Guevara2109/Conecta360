@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Contactos\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\Mensajes\Index.cshtml" />
   </ItemGroup>
 
