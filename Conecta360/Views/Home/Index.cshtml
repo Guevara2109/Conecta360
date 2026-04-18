@@ -1,86 +1,49 @@
 @{
-    ViewData["Title"] = "Conect360";
+    ViewData["Title"] = "Inicio";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @* ── ENCABEZADO ── *@
-<div class="brand-block">
-    <div class="brand-title">Conect360</div>
-    <div class="brand-globe">
-        <div class="globe-circle">
-            <div class="globe-land globe-land-1"></div>
-            <div class="globe-land globe-land-2"></div>
+<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:6px;">
+    <div style="font-family:'Permanent Marker',cursive;font-size:2.4rem;color:#1a1a1a;letter-spacing:-1px;line-height:1;">
+        Conect360
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;">
+        <div style="width:52px;height:52px;border-radius:50%;background:#3a8fd4;border:2px solid #1a1a1a;position:relative;overflow:hidden;">
+            <div style="position:absolute;background:#4aaa44;width:26px;height:20px;top:8px;left:8px;border-radius:50% 30% 40% 50%;"></div>
+            <div style="position:absolute;background:#4aaa44;width:14px;height:12px;bottom:7px;right:5px;border-radius:40%;"></div>
         </div>
-        <div class="globe-a"></div>
     </div>
 </div>
-<div class="title-divider"></div>
+<div style="font-size:13px;color:#888;margin-bottom:10px;font-family:'Caveat',cursive;">
+    Tu agenda de contactos personal
+</div>
+<div style="height:5px;background:#1a1a1a;margin-bottom:20px;"></div>
 
-@* ── BUSCAR ── *@
-<div style="margin-bottom:14px">
-    <a href="/Contactos" class="sketch-box" style="justify-content:flex-start;font-size:1rem">
-        Buscar
+@* ── ESTADÍSTICAS ── *@
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px;">
+    <div style="border:2.5px solid #1a1a1a;background:#fff;padding:14px;text-align:center;">
+        <div style="font-size:2.2rem;font-weight:700;color:#1a1a1a;line-height:1;">@ViewBag.TotalContactos</div>
+        <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Contactos</div>
+    </div>
+    <div style="border:2.5px solid #1a1a1a;background:#fff;padding:14px;text-align:center;">
+        <div style="font-size:2.2rem;font-weight:700;color:#1a1a1a;line-height:1;">@ViewBag.TotalCategorias</div>
+        <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">Categorías</div>
+    </div>
+    <a href="/Contactos/Create" style="border:2.5px solid #1a1a1a;background:#1a1a1a;color:#fff;padding:14px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-family:'Caveat',cursive;transition:background .15s;"
+           onmouseover="this.style.background='#4422cc';this.style.borderColor='#4422cc';"
+           onmouseout="this.style.background='#1a1a1a';this.style.borderColor='#1a1a1a';">
+        <span style="font-size:1.6rem;">+</span>
+        <span style="font-size:0.9rem;">Nuevo Contacto</span>
     </a>
 </div>
 
-@* ── FILA: REGISTRO + GESTIONAR CONTACTOS ── *@
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-    <a href="/Contactos/Create" class="sketch-box" style="min-height:54px">
-        Registro
+@* ── ACCESOS RÁPIDOS ── *@
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+    <a href="/Contactos" class="sketch-box" style="min-height:54px;font-size:1.05rem;text-decoration:none;">
+        Ver todos los contactos
     </a>
-    <a href="/Contactos" class="sketch-box" style="min-height:54px">
-        Gestionar<br />Contactos
+    <a href="/Contactos/Categorias" class="sketch-box" style="min-height:54px;font-size:1.05rem;text-decoration:none;">
+        Organizar por categorías
     </a>
 </div>
-
-@* ── FILA: CATEGORÍAS + TECLADO ── *@
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-
-    @* Columna izquierda *@
-    <div style="display:flex;flex-direction:column;gap:10px">
-        <a href="/Contactos/Categorias" class="sketch-box" style="min-height:78px;flex-direction:column;align-items:flex-start;justify-content:center;padding-left:14px">
-            Organizar<br />Por<br />Categorías
-        </a>
-        <a href="/Mensajes" class="sketch-box" style="min-height:50px;justify-content:flex-start">
-            Mensajes&nbsp;
-            <div class="bubble-icon">
-                <span><i></i><i></i><i></i></span>
-            </div>
-        </a>
-    </div>
-
-    @* Columna derecha — Teclado *@
-    <div>
-        <div class="teclado-title">Teclado</div>
-        <div class="dial-grid">
-            <button class="dial-key" onclick="dialPress('1')">1</button>
-            <button class="dial-key" onclick="dialPress('2')">2</button>
-            <button class="dial-key" onclick="dialPress('3')">3</button>
-            <button class="dial-key" onclick="dialPress('4')">4</button>
-            <button class="dial-key" onclick="dialPress('5')">5</button>
-            <button class="dial-key" onclick="dialPress('6')">6</button>
-            <button class="dial-key" onclick="dialPress('7')">7</button>
-            <button class="dial-key" onclick="dialPress('8')">8</button>
-            <button class="dial-key" onclick="dialPress('9')">9</button>
-            <button class="dial-key" onclick="dialPress('*')">*</button>
-            <button class="dial-key" onclick="dialPress('0')">0<br /><small style="font-size:.6rem">+</small></button>
-            <button class="dial-key" onclick="dialPress('#')">#</button>
-        </div>
-        <div class="dial-actions">
-            <div></div>
-            <div style="display:flex;gap:8px">
-                <button class="call-btn call-phone" onclick="alert('Llamar: ' + dialNum)">&#128222;</button>
-                <button class="call-btn call-video" onclick="alert('Video...')">&#127909;</button>
-            </div>
-            <div></div>
-        </div>
-    </div>
-
-</div>
-
-<script>
-    var dialNum = '';
-    function dialPress(d) {
-        dialNum += d;
-    }
-</script>

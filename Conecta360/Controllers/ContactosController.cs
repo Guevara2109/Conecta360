@@ -6,20 +6,41 @@ namespace Conect360.Controllers
     public class ContactosController : Controller
     {
         // ── ALMACENAMIENTO TEMPORAL EN MEMORIA ──
-        // TODO: reemplazar con ApplicationDbContext + Entity Framework Core
+        // Se expone como público para que HomeController pueda leer las stats
         private static List<Contacto> _contactos = new();
         private static int _nextId = 1;
 
+        // Método público para que otros controladores lean la lista
+        public static List<Contacto> ObtenerContactos() => _contactos;
+
         // ── GET /Contactos ──────────────────────────────────────────────
-        public IActionResult Index()
+        public IActionResult Index(string? buscar, string? categoria)
         {
-            // TODO: return View(_context.Contactos.ToList());
-            return View(_contactos);
+            ViewBag.TotalContactos = _contactos.Count;
+            ViewBag.TotalCategorias = _contactos.Select(c => c.Categoria).Distinct().Count();
+
+            var lista = _contactos.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+                lista = lista.Where(c =>
+                    c.Nombre.Contains(buscar, StringComparison.OrdinalIgnoreCase) ||
+                    c.Apellido.Contains(buscar, StringComparison.OrdinalIgnoreCase) ||
+                    c.Telefono.Contains(buscar, StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrWhiteSpace(categoria))
+                lista = lista.Where(c => c.Categoria == categoria);
+
+            ViewBag.Buscar = buscar;
+            ViewBag.Categoria = categoria;
+
+            return View(lista.ToList());
         }
 
         // ── GET /Contactos/Create ───────────────────────────────────────
         public IActionResult Create()
         {
+            ViewBag.TotalContactos = _contactos.Count;
+            ViewBag.TotalCategorias = _contactos.Select(c => c.Categoria).Distinct().Count();
             return View();
         }
 
@@ -29,9 +50,12 @@ namespace Conect360.Controllers
         public IActionResult Create(Contacto contacto)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.TotalContactos = _contactos.Count;
+                ViewBag.TotalCategorias = _contactos.Select(c => c.Categoria).Distinct().Count();
                 return View(contacto);
+            }
 
-            // TODO: _context.Contactos.Add(contacto); await _context.SaveChangesAsync();
             contacto.Id = _nextId++;
             contacto.FechaRegistro = DateTime.Now;
             _contactos.Add(contacto);
@@ -40,20 +64,14 @@ namespace Conect360.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ── GET /Contactos/Details/5 ────────────────────────────────────
-        public IActionResult Details(int id)
-        {
-            // TODO: var contacto = await _context.Contactos.FindAsync(id);
-            var contacto = _contactos.FirstOrDefault(c => c.Id == id);
-            if (contacto == null) return NotFound();
-            return View(contacto);
-        }
-
         // ── GET /Contactos/Edit/5 ───────────────────────────────────────
         public IActionResult Edit(int id)
         {
             var contacto = _contactos.FirstOrDefault(c => c.Id == id);
             if (contacto == null) return NotFound();
+
+            ViewBag.TotalContactos = _contactos.Count;
+            ViewBag.TotalCategorias = _contactos.Select(c => c.Categoria).Distinct().Count();
             return View(contacto);
         }
 
@@ -63,29 +81,24 @@ namespace Conect360.Controllers
         public IActionResult Edit(int id, Contacto contacto)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.TotalContactos = _contactos.Count;
+                ViewBag.TotalCategorias = _contactos.Select(c => c.Categoria).Distinct().Count();
                 return View(contacto);
+            }
 
             var existente = _contactos.FirstOrDefault(c => c.Id == id);
             if (existente == null) return NotFound();
 
-            // TODO: _context.Update(contacto); await _context.SaveChangesAsync();
-            existente.Nombre    = contacto.Nombre;
-            existente.Apellido  = contacto.Apellido;
-            existente.Telefono  = contacto.Telefono;
-            existente.Email     = contacto.Email;
+            existente.Nombre = contacto.Nombre;
+            existente.Apellido = contacto.Apellido;
+            existente.Telefono = contacto.Telefono;
+            existente.Email = contacto.Email;
             existente.Categoria = contacto.Categoria;
-            existente.Notas     = contacto.Notas;
+            existente.Notas = contacto.Notas;
 
-            TempData["Mensaje"] = "Contacto actualizado.";
+            TempData["Mensaje"] = "Contacto actualizado correctamente.";
             return RedirectToAction(nameof(Index));
-        }
-
-        // ── GET /Contactos/Delete/5 ─────────────────────────────────────
-        public IActionResult Delete(int id)
-        {
-            var contacto = _contactos.FirstOrDefault(c => c.Id == id);
-            if (contacto == null) return NotFound();
-            return View(contacto);
         }
 
         // ── POST /Contactos/Delete/5 ────────────────────────────────────
@@ -93,8 +106,6 @@ namespace Conect360.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            // TODO: var contacto = await _context.Contactos.FindAsync(id);
-            //       _context.Contactos.Remove(contacto); await _context.SaveChangesAsync();
             var contacto = _contactos.FirstOrDefault(c => c.Id == id);
             if (contacto != null) _contactos.Remove(contacto);
 
@@ -103,10 +114,17 @@ namespace Conect360.Controllers
         }
 
         // ── GET /Contactos/Categorias ───────────────────────────────────
-        public IActionResult Categorias()
+        public IActionResult Categorias(string? filtro)
         {
-            // TODO: agrupar desde _context.Contactos.GroupBy(c => c.Categoria)
-            var grupos = _contactos.GroupBy(c => c.Categoria);
+            ViewBag.TotalContactos = _contactos.Count;
+            ViewBag.TotalCategorias = _contactos.Select(c => c.Categoria).Distinct().Count();
+            ViewBag.Filtro = filtro;
+
+            var lista = _contactos.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(filtro))
+                lista = lista.Where(c => c.Categoria == filtro);
+
+            var grupos = lista.GroupBy(c => c.Categoria);
             return View(grupos);
         }
     }
