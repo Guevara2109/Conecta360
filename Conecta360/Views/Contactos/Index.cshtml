@@ -1,86 +1,85 @@
+@model IEnumerable<Conect360.Models.Contacto>
+
 @{
-    ViewData["Title"] = "Conect360";
+    ViewData["Title"] = "Contactos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@* ── ENCABEZADO ── *@
-<div class="brand-block">
-    <div class="brand-title">Conect360</div>
-    <div class="brand-globe">
-        <div class="globe-circle">
-            <div class="globe-land globe-land-1"></div>
-            <div class="globe-land globe-land-2"></div>
-        </div>
-        <div class="globe-a"></div>
-    </div>
-</div>
-<div class="title-divider"></div>
-
-@* ── BUSCAR ── *@
-<div style="margin-bottom:14px">
-    <a href="/Contactos" class="sketch-box" style="justify-content:flex-start;font-size:1rem">
-        Buscar
-    </a>
+<div class="page-heading">
+    <h2>Contactos</h2>
+    <a href="/Contactos/Create" class="btn-nuevo">+ Nuevo Contacto</a>
 </div>
 
-@* ── FILA: REGISTRO + GESTIONAR CONTACTOS ── *@
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-    <a href="/Contactos/Create" class="sketch-box" style="min-height:54px">
-        Registro
-    </a>
-    <a href="/Contactos" class="sketch-box" style="min-height:54px">
-        Gestionar<br />Contactos
-    </a>
-</div>
-
-@* ── FILA: CATEGORÍAS + TECLADO ── *@
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-
-    @* Columna izquierda *@
-    <div style="display:flex;flex-direction:column;gap:10px">
-        <a href="/Contactos/Categorias" class="sketch-box" style="min-height:78px;flex-direction:column;align-items:flex-start;justify-content:center;padding-left:14px">
-            Organizar<br />Por<br />Categorías
-        </a>
-        <a href="/Mensajes" class="sketch-box" style="min-height:50px;justify-content:flex-start">
-            Mensajes&nbsp;
-            <div class="bubble-icon">
-                <span><i></i><i></i><i></i></span>
-            </div>
-        </a>
-    </div>
-
-    @* Columna derecha — Teclado *@
-    <div>
-        <div class="teclado-title">Teclado</div>
-        <div class="dial-grid">
-            <button class="dial-key" onclick="dialPress('1')">1</button>
-            <button class="dial-key" onclick="dialPress('2')">2</button>
-            <button class="dial-key" onclick="dialPress('3')">3</button>
-            <button class="dial-key" onclick="dialPress('4')">4</button>
-            <button class="dial-key" onclick="dialPress('5')">5</button>
-            <button class="dial-key" onclick="dialPress('6')">6</button>
-            <button class="dial-key" onclick="dialPress('7')">7</button>
-            <button class="dial-key" onclick="dialPress('8')">8</button>
-            <button class="dial-key" onclick="dialPress('9')">9</button>
-            <button class="dial-key" onclick="dialPress('*')">*</button>
-            <button class="dial-key" onclick="dialPress('0')">0<br /><small style="font-size:.6rem">+</small></button>
-            <button class="dial-key" onclick="dialPress('#')">#</button>
-        </div>
-        <div class="dial-actions">
-            <div></div>
-            <div style="display:flex;gap:8px">
-                <button class="call-btn call-phone" onclick="alert('Llamar: ' + dialNum)">&#128222;</button>
-                <button class="call-btn call-video" onclick="alert('Video...')">&#127909;</button>
-            </div>
-            <div></div>
-        </div>
-    </div>
-
-</div>
-
-<script>
-    var dialNum = '';
-    function dialPress(d) {
-        dialNum += d;
+@* ── BARRA DE BÚSQUEDA Y FILTRO ── *@
+<form method="get" action="/Contactos" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+    <input class="search-sketch"
+           type="text"
+           name="buscar"
+           value="@ViewBag.Buscar"
+           placeholder="Buscar por nombre o teléfono..."
+           style="flex:1;min-width:200px;" />
+    <select class="search-sketch" name="categoria" style="min-width:180px;">
+        <option value="">Todas las categorías</option>
+        <option value="General"   @(ViewBag.Categoria == "General"   ? "selected" : "")>General</option>
+        <option value="Familia"   @(ViewBag.Categoria == "Familia"   ? "selected" : "")>Familia</option>
+        <option value="Trabajo"   @(ViewBag.Categoria == "Trabajo"   ? "selected" : "")>Trabajo</option>
+        <option value="Amigos"    @(ViewBag.Categoria == "Amigos"    ? "selected" : "")>Amigos</option>
+        <option value="Favoritos" @(ViewBag.Categoria == "Favoritos" ? "selected" : "")>Favoritos</option>
+    </select>
+    <button type="submit" class="btn-nuevo">Buscar</button>
+    @if (!string.IsNullOrEmpty(ViewBag.Buscar as string) || !string.IsNullOrEmpty(ViewBag.Categoria as string))
+    {
+        <a href="/Contactos" class="btn-cancelar" style="padding:5px 14px;">Limpiar</a>
     }
-</script>
+</form>
+
+@* ── TABLA DE CONTACTOS ── *@
+@if (!Model.Any())
+{
+    <p style="font-family:'Caveat',cursive;color:#888;text-align:center;padding:30px;">
+        No se encontraron contactos.
+        <a href="/Contactos/Create" style="color:#4422cc;">Registra el primero</a>.
+    </p>
+}
+else
+{
+    <div style="overflow-x:auto;">
+        <table class="table-sketch">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>@c.Nombre</td>
+                        <td>@c.Apellido</td>
+                        <td>@c.Telefono</td>
+                        <td>@c.Email</td>
+                        <td>
+                            <span class="badge-cat badge-@c.Categoria.ToLower()">@c.Categoria</span>
+                        </td>
+                        <td>
+                            <a href="/Contactos/Edit/@c.Id" class="act">Editar</a>
+                            <form method="post" action="/Contactos/Delete/@c.Id" style="display:inline;"
+                                  onsubmit="return confirm('¿Eliminar a @c.Nombre @c.Apellido?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="act del">Borrar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div style="font-family:'Caveat',cursive;font-size:13px;color:#888;margin-top:10px;">
+        @Model.Count() contacto(s) encontrado(s)
+    </div>
+}
