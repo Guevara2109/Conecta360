@@ -14,11 +14,50 @@
 <form method="get" action="/Contactos/Categorias" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
     <select class="search-sketch" name="filtro" style="min-width:200px;">
         <option value="">Ver todas las categorías</option>
-        <option value="General"   @(ViewBag.Filtro == "General"   ? "selected" : "")>General</option>
-        <option value="Familia"   @(ViewBag.Filtro == "Familia"   ? "selected" : "")>Familia</option>
-        <option value="Trabajo"   @(ViewBag.Filtro == "Trabajo"   ? "selected" : "")>Trabajo</option>
-        <option value="Amigos"    @(ViewBag.Filtro == "Amigos"    ? "selected" : "")>Amigos</option>
-        <option value="Favoritos" @(ViewBag.Filtro == "Favoritos" ? "selected" : "")>Favoritos</option>
+        @if ((ViewBag.Filtro as string) == "General")
+        {
+            <option value="General" selected>General</option>
+        }
+        else
+        {
+            <option value="General">General</option>
+        }
+
+        @if ((ViewBag.Filtro as string) == "Familia")
+        {
+            <option value="Familia" selected>Familia</option>
+        }
+        else
+        {
+            <option value="Familia">Familia</option>
+        }
+
+        @if ((ViewBag.Filtro as string) == "Trabajo")
+        {
+            <option value="Trabajo" selected>Trabajo</option>
+        }
+        else
+        {
+            <option value="Trabajo">Trabajo</option>
+        }
+
+        @if ((ViewBag.Filtro as string) == "Amigos")
+        {
+            <option value="Amigos" selected>Amigos</option>
+        }
+        else
+        {
+            <option value="Amigos">Amigos</option>
+        }
+
+        @if ((ViewBag.Filtro as string) == "Favoritos")
+        {
+            <option value="Favoritos" selected>Favoritos</option>
+        }
+        else
+        {
+            <option value="Favoritos">Favoritos</option>
+        }
     </select>
     <button type="submit" class="btn-nuevo">Filtrar</button>
     @if (!string.IsNullOrEmpty(ViewBag.Filtro as string))

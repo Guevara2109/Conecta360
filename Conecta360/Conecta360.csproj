@@ -6,12 +6,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="Views\Mensajes\Index.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Mensajes\Index.cshtml" />
-  </ItemGroup>
-
 </Project>
