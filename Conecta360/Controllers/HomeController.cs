@@ -1,17 +1,27 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Conect360.Data;
 
 namespace Conect360.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IContactoRepository _repo;
+
+        public HomeController(IContactoRepository repo)
         {
-            // Pasamos estadísticas al sidebar y al dashboard de inicio
-            ViewBag.TotalContactos = ContactosController.ObtenerContactos().Count;
-            ViewBag.TotalCategorias = ContactosController.ObtenerContactos()
+            _repo = repo;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var contactos = await _repo.ObtenerTodosAsync();
+            ViewBag.TotalContactos = contactos.Count();
+            ViewBag.TotalCategorias = contactos
                                         .Select(c => c.Categoria)
                                         .Distinct()
                                         .Count();
+
             return View();
         }
     }

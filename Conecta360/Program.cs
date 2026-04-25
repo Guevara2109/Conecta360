@@ -1,23 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using Conect360.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ── ENTITY FRAMEWORK + SQL SERVER ──────────────────────────────────
+builder.Services.AddDbContext<Conecta360DbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("Conecta360DB")));
+
+// ── REPOSITORIO (Inyección de dependencias) ─────────────────────────
+builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
+
+// ── MVC ──────────────────────────────────────────────────────────────
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
