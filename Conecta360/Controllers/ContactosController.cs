@@ -1,35 +1,35 @@
 using Microsoft.AspNetCore.Mvc;
-using Conect360.Data;
 using Conect360.Models;
+using Conect360.Services;
 
 namespace Conect360.Controllers
 {
     public class ContactosController : Controller
     {
-        private readonly IContactoRepository _repo;
+        private readonly IContactoService _service;
 
-        public ContactosController(IContactoRepository repo)
+        public ContactosController(IContactoService service)
         {
-            _repo = repo;
+            _service = service;
         }
 
         // ── GET /Contactos ──────────────────────────────────────────────
         public async Task<IActionResult> Index(string? buscar, string? categoria)
         {
-            ViewBag.TotalContactos  = await _repo.ContarAsync();
-            ViewBag.TotalCategorias = await _repo.ContarCategoriasAsync();
-            ViewBag.Buscar          = buscar;
-            ViewBag.Categoria       = categoria;
+            ViewBag.TotalContactos = await _service.ContarAsync();
+            ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
+            ViewBag.Buscar = buscar;
+            ViewBag.Categoria = categoria;
 
-            var lista = await _repo.BuscarAsync(buscar, categoria);
+            var lista = await _service.BuscarAsync(buscar, categoria);
             return View(lista);
         }
 
         // ── GET /Contactos/Create ───────────────────────────────────────
         public async Task<IActionResult> Create()
         {
-            ViewBag.TotalContactos  = await _repo.ContarAsync();
-            ViewBag.TotalCategorias = await _repo.ContarCategoriasAsync();
+            ViewBag.TotalContactos = await _service.ContarAsync();
+            ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
             return View();
         }
 
@@ -40,24 +40,33 @@ namespace Conect360.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.TotalContactos  = await _repo.ContarAsync();
-                ViewBag.TotalCategorias = await _repo.ContarCategoriasAsync();
+                ViewBag.TotalContactos = await _service.ContarAsync();
+                ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
                 return View(contacto);
             }
 
-            await _repo.CrearAsync(contacto);
-            TempData["Mensaje"] = "Contacto registrado correctamente.";
+            var resultado = await _service.CrearAsync(contacto);
+
+            if (!resultado.Exito)
+            {
+                ModelState.AddModelError(string.Empty, resultado.Mensaje);
+                ViewBag.TotalContactos = await _service.ContarAsync();
+                ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
+                return View(contacto);
+            }
+
+            TempData["Mensaje"] = resultado.Mensaje;
             return RedirectToAction(nameof(Index));
         }
 
         // ── GET /Contactos/Edit/5 ───────────────────────────────────────
         public async Task<IActionResult> Edit(int id)
         {
-            var contacto = await _repo.ObtenerPorIdAsync(id);
+            var contacto = await _service.ObtenerPorIdAsync(id);
             if (contacto == null) return NotFound();
 
-            ViewBag.TotalContactos  = await _repo.ContarAsync();
-            ViewBag.TotalCategorias = await _repo.ContarCategoriasAsync();
+            ViewBag.TotalContactos = await _service.ContarAsync();
+            ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
             return View(contacto);
         }
 
@@ -68,16 +77,22 @@ namespace Conect360.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.TotalContactos  = await _repo.ContarAsync();
-                ViewBag.TotalCategorias = await _repo.ContarCategoriasAsync();
+                ViewBag.TotalContactos = await _service.ContarAsync();
+                ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
                 return View(contacto);
             }
 
-            contacto.Id = id;
-            var actualizado = await _repo.ActualizarAsync(contacto);
-            if (!actualizado) return NotFound();
+            var resultado = await _service.ActualizarAsync(id, contacto);
 
-            TempData["Mensaje"] = "Contacto actualizado correctamente.";
+            if (!resultado.Exito)
+            {
+                ModelState.AddModelError(string.Empty, resultado.Mensaje);
+                ViewBag.TotalContactos = await _service.ContarAsync();
+                ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
+                return View(contacto);
+            }
+
+            TempData["Mensaje"] = resultado.Mensaje;
             return RedirectToAction(nameof(Index));
         }
 
@@ -86,26 +101,21 @@ namespace Conect360.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _repo.EliminarAsync(id);
-            TempData["Mensaje"] = "Contacto eliminado.";
+            var resultado = await _service.EliminarAsync(id);
+            TempData["Mensaje"] = resultado.Mensaje;
             return RedirectToAction(nameof(Index));
         }
 
         // ── GET /Contactos/Categorias ───────────────────────────────────
         public async Task<IActionResult> Categorias(string? filtro)
         {
-            ViewBag.TotalContactos  = await _repo.ContarAsync();
-            ViewBag.TotalCategorias = await _repo.ContarCategoriasAsync();
-            ViewBag.Filtro          = filtro;
+            ViewBag.TotalContactos = await _service.ContarAsync();
+            ViewBag.TotalCategorias = await _service.ContarCategoriasAsync();
+            ViewBag.Filtro = filtro;
 
-            var lista = await _repo.BuscarAsync(null, filtro);
+            var lista = await _service.BuscarAsync(null, filtro);
             var grupos = lista.GroupBy(c => c.Categoria);
             return View(grupos);
-        }
-
-        internal static IEnumerable<object> ObtenerContactos()
-        {
-            throw new NotImplementedException();
         }
     }
 }

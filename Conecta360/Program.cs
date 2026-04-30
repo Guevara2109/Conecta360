@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Conect360.Data;
+using Conect360.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,9 @@ builder.Services.AddDbContext<Conecta360DbContext>(options =>
 
 // ── REPOSITORIO (Inyección de dependencias) ─────────────────────────
 builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
+
+// Agrege el servicio de ContactoService a la inyección de dependencias
+builder.Services.AddScoped<IContactoService, ContactoService>();
 
 // ── MVC ──────────────────────────────────────────────────────────────
 builder.Services.AddControllersWithViews();
