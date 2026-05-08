@@ -6,6 +6,14 @@
 }
 
 <div class="page-heading">
+    @if (TempData["Mensaje"] != null)
+    {
+        <div style="background:#d4edda;border:2px solid #28a745;color:#155724;
+            padding:10px 16px;margin-bottom:16px;font-family:'Caveat',cursive;
+            font-size:16px;border-radius:4px;">
+            ✅ @TempData["Mensaje"]
+        </div>
+    }
     <h2>Contactos</h2>
     <a href="/Contactos/Create" class="btn-nuevo">+ Nuevo Contacto</a>
 </div>
