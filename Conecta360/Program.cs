@@ -16,8 +16,10 @@ builder.Services.AddScoped<IContactoRepository, ContactoRepository>();
 builder.Services.AddScoped<IContactoService, ContactoService>();
 
 // ── MVC ──────────────────────────────────────────────────────────────
-builder.Services.AddControllersWithViews();
-
+builder.Services.AddControllersWithViews(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+});
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
